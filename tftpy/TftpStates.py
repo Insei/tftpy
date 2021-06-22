@@ -350,6 +350,8 @@ class TftpStateServerRecvWRQ(TftpServerState):
     """This class represents the state of the TFTP server when it has just
     received a WRQ packet."""
     def make_subdirs(self):
+        self.sendError(TftpErrors.AccessViolation)
+        raise TftpException("Write to %s not permitted" % self.full_path)
         """The purpose of this method is to, if necessary, create all of the
         subdirectories leading up to the file to the written."""
         # Pull off everything below the root.
@@ -370,6 +372,8 @@ class TftpStateServerRecvWRQ(TftpServerState):
 
     def handle(self, pkt, raddress, rport):
         "Handle an initial WRQ packet as a server."
+        self.sendError(TftpErrors.AccessViolation)
+        raise TftpException("Write to %s not permitted" % self.full_path)
         log.debug("In TftpStateServerRecvWRQ.handle")
         sendoack = self.serverInitial(pkt, raddress, rport)
         path = self.full_path
